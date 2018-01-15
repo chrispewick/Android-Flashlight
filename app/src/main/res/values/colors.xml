@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#8A0808</color>
+    <color name="colorPrimaryDark">#8A0808</color>
+    <color name="colorAccent">#B40404</color>
+
+    <color name="black_100_percent">#000000</color>
+    <color name="black_90_percent">#191919</color>
+    <color name="black_75_percent">#404040</color>
+    <color name="black_50_percent">#808080</color>
+    <color name="black_30_percent">#b3b3b3</color>
+</resources>

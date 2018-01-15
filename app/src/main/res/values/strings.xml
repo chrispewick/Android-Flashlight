@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Flashlight</string>
+
+    <string name="turn_light_on">Turn Light On</string>
+    <string name="turn_light_off">Turn Light Off</string>
+    <string name="toggle_light">Toggle Light</string>
+
+    <string name="permission_request">Please grant permission for this application to utilize the LED flash of your device\'s camera.</string>
+</resources>
