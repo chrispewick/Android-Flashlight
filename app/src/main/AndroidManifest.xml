@@ -23,4 +23,12 @@
         </activity>
     </application>
 
+    <receiver android:name="FlashlightWidgetProvider">
+        <intent-filter>
+            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        </intent-filter>
+        <meta-date android:name="android.appwidget.provider"
+            android:resource="@xml/flashlight_appwidget_info" />
+    </receiver>
+
 </manifest>
