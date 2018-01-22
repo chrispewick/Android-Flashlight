@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -29,7 +32,6 @@ public class FlashlightService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Log.i(TAG, "onHandleIntent");
-//        Toast.makeText(this, "Widget Worked!", Toast.LENGTH_SHORT).show();
 
         if(Build.VERSION.SDK_INT >= 23) {
             Log.i(TAG, "API >= 23");
@@ -37,6 +39,9 @@ public class FlashlightService extends IntentService {
             try{
                 String cameraId = cameraManager.getCameraIdList()[0];
                 cameraManager.setTorchMode(cameraId, !isLightOn);
+                if(!isLightOn){
+                    new Thread(new VibrateRunnable()).start();
+                }
                 isLightOn = !isLightOn;
             } catch(CameraAccessException e){
                 e.printStackTrace();
@@ -50,6 +55,7 @@ public class FlashlightService extends IntentService {
                 if (parameters.getFlashMode().equalsIgnoreCase("off")) {
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
                     camera.setParameters(parameters);
+                    new Thread(new VibrateRunnable()).start();
                     isLightOn = true;
                 } else {
                     parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
@@ -68,5 +74,23 @@ public class FlashlightService extends IntentService {
 
         Log.i(TAG, "isLightOn: "+isLightOn);
         FlashlightAppWidgetProvider.updateWidget(this, AppWidgetManager.getInstance(this), isLightOn);
+    }
+
+    /**
+     * This Runnable is necessary to prevent the widget icon change from stalling until the
+     * vibration has completed.
+     */
+    private class VibrateRunnable implements Runnable{
+        @Override
+        public void run() {
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(150);
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            v.vibrate(150);
+        }
     }
 }
