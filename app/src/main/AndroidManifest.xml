@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pewick.flashlight">
+    package="com.pewick.flashlight"
+    android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
-
 
     <application
         android:allowBackup="true"
@@ -21,14 +21,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".FlashlightService"
+            android:exported="false">
+        </service>
+
+        <receiver android:name="FlashlightAppWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/flashlight_appwidget_info" />
+        </receiver>
+
     </application>
-
-    <receiver android:name="FlashlightWidgetProvider">
-        <intent-filter>
-            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-        </intent-filter>
-        <meta-date android:name="android.appwidget.provider"
-            android:resource="@xml/flashlight_appwidget_info" />
-    </receiver>
-
 </manifest>

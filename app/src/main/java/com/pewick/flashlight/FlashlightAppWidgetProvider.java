@@ -3,8 +3,10 @@ package com.pewick.flashlight;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
@@ -12,27 +14,33 @@ import android.widget.RemoteViews;
  */
 
 public class FlashlightAppWidgetProvider extends AppWidgetProvider {
+    private static final String TAG = "WidgetProvider";
 
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
+        updateWidget(context, appWidgetManager, false);
+    }
+
+    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, boolean isLightOn){
+        Log.i(TAG, "updateWidget, light: "+isLightOn);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, FlashlightAppWidgetProvider.class));
         final int N = appWidgetIds.length;
+        Log.i(TAG, "N: "+N);
 
         // Perform this loop procedure for each App Widget that belongs to this provider
-        //Note: perhaps this can allow multiple widget for this app. However, may complicate too much to be worth that
-        // Also, perhaps having mulitple widgets would cause the ilight to turn on/off for each widget. So test thoroughly if using
-        for (int i=0; i<N; i++) {
+        for(int i=0; i<N; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            // Create an Intent to launch ExampleActivity
-            //Maybe need a "turn on" and "turn off" service
-            //Or, check within the service if the light is on? Would still need to handle updating the widget view though
-            //Perhaps handle with a callback to this, or another handler from the service?
-            Intent intent = new Intent(context, ExampleActivity.class); //TODO: write and connect service here
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            Intent intent = new Intent(context, FlashlightService.class);
+            PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
 
-
-            // Get the layout for the App Widget and attach an on-click listener
-            // to the button
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+
+            if(isLightOn) {
+                views.setImageViewResource(R.id.widget_button, R.drawable.flash_off_24dp);
+            } else{
+                views.setImageViewResource(R.id.widget_button, R.drawable.flash_on_24dp);
+            }
+
             views.setOnClickPendingIntent(R.id.widget_button, pendingIntent);
 
             // Tell the AppWidgetManager to perform an update on the current app widget
