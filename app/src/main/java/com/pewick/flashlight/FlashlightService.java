@@ -15,7 +15,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
- * Created by Chris on 1/15/2018.
+ * Service used to turn the flashlight on and off, then update the widget icon accordingly.
  */
 
 public class FlashlightService extends IntentService {

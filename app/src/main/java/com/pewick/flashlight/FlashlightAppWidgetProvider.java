@@ -10,7 +10,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 /**
- * Created by Chris on 1/15/2018.
+ * Widget for the application. Provides user with a button on their home page to
+ * turn the light on and off.
  */
 
 public class FlashlightAppWidgetProvider extends AppWidgetProvider {
